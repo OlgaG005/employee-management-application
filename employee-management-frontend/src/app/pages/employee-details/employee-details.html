@@ -1,0 +1,62 @@
+<div class="details-page">
+
+  <div class="card">
+
+    <button class="back-button" (click)="goBack()">
+      Back
+    </button>
+
+    <p class="loading" *ngIf="isLoading">
+      Loading employee...
+    </p>
+
+    <p class="error" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </p>
+
+    <div *ngIf="employee">
+
+      <h1>
+        {{ employee.firstName }}
+        {{ employee.lastName }}
+      </h1>
+
+      <div class="details-grid">
+
+        <div>
+          <strong>Email</strong>
+          <p>{{ employee.email }}</p>
+        </div>
+
+        <div>
+          <strong>Job Title</strong>
+          <p>{{ employee.jobTitle }}</p>
+        </div>
+
+        <div>
+          <strong>Department</strong>
+          <p>{{ employee.department }}</p>
+        </div>
+
+        <div>
+          <strong>Phone</strong>
+          <p>{{ employee.phone }}</p>
+        </div>
+
+        <div>
+          <strong>Created At</strong>
+          <p>{{ employee.createdAt }}</p>
+        </div>
+
+        <div>
+          <strong>Updated At</strong>
+          <p>{{ employee.updatedAt }}</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

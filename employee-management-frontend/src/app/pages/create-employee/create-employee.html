@@ -1,0 +1,60 @@
+<div class="create-page">
+
+  <div class="card">
+
+    <h1>Create Employee</h1>
+
+    <form #employeeForm="ngForm" (ngSubmit)="onSubmit(employeeForm)" novalidate>
+
+      <input type="text" placeholder="First Name" name="firstName" [(ngModel)]="employee.firstName" #firstName="ngModel"
+        required />
+      <p class="field-error" *ngIf="firstName.invalid && firstName.touched">
+        First name is required.
+      </p>
+
+      <input type="text" placeholder="Last Name" name="lastName" [(ngModel)]="employee.lastName" #lastName="ngModel"
+        required />
+      <p class="field-error" *ngIf="lastName.invalid && lastName.touched">
+        Last name is required.
+      </p>
+
+      <input type="email" placeholder="Email" name="email" [(ngModel)]="employee.email" #email="ngModel" required
+        email />
+      <p class="field-error" *ngIf="email.errors?.['required'] && email.touched">
+        Email is required.
+      </p>
+      <p class="field-error" *ngIf="email.errors?.['email'] && email.touched">
+        Please enter a valid email address.
+      </p>
+
+      <input type="text" placeholder="Job Title" name="jobTitle" [(ngModel)]="employee.jobTitle" #jobTitle="ngModel"
+        required />
+      <p class="field-error" *ngIf="jobTitle.invalid && jobTitle.touched">
+        Job title is required.
+      </p>
+
+      <input type="text" placeholder="Department" name="department" [(ngModel)]="employee.department" />
+
+      <div class="phone-field">
+        <span class="phone-prefix">+30</span>
+
+        <input type="tel" placeholder="6901234567" name="phone" [(ngModel)]="employee.phone" #phone="ngModel"
+          pattern="^[0-9]{10}$" maxlength="10" inputmode="numeric" />
+      </div>
+      <p class="field-error" *ngIf="phone.errors?.['pattern'] && phone.touched">
+        Phone must contain exactly 10 digits.
+      </p>
+
+      <p class="error" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </p>
+
+      <button type="submit" [disabled]="isLoading">
+        {{ isLoading ? 'Creating...' : 'Create Employee' }}
+      </button>
+
+    </form>
+
+  </div>
+
+</div>

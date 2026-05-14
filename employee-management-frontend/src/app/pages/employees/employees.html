@@ -1,0 +1,76 @@
+<div class="employees-page">
+
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Employee Management</p>
+      <h1>Employees</h1>
+      <p class="subtitle">Signed in as {{ role }}</p>
+    </div>
+
+    <div class="topbar-actions">
+      <!-- Admin-only action -->
+      <button *ngIf="isAdmin()" class="primary" (click)="goToCreateEmployee()">
+        Add Employee
+      </button>
+
+      <button class="secondary" (click)="logout()">
+        Logout
+      </button>
+    </div>
+  </header>
+
+  <p class="loading" *ngIf="isLoading">
+    Loading employees...
+  </p>
+
+  <p class="error" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </p>
+
+  <div class="empty-state" *ngIf="!isLoading && !errorMessage && employees.length === 0">
+    <h2>No employees yet</h2>
+    <!-- Admin-only action -->
+    <p *ngIf="isAdmin()">Create your first employee to populate the list.</p>
+    <p *ngIf="!isAdmin()">There are no employees available at the moment.</p>
+
+    <button *ngIf="isAdmin()" class="primary" (click)="goToCreateEmployee()">
+      Add Employee
+    </button>
+  </div>
+
+  <div class="employee-grid" *ngIf="employees.length > 0">
+
+    <div class="employee-card" *ngFor="let employee of employees">
+
+      <div class="card-header">
+        <div>
+          <h3>{{ employee.firstName }} {{ employee.lastName }}</h3>
+          <p>{{ employee.jobTitle }}</p>
+        </div>
+      </div>
+
+      <div class="card-info">
+        <p><span>Email</span>{{ employee.email }}</p>
+        <p><span>Department</span>{{ employee.department || 'N/A' }}</p>
+        <p><span>Phone</span>{{ employee.phone || 'N/A' }}</p>
+      </div>
+
+      <div class="card-actions">
+        <button class="small primary" (click)="goToEmployeeDetails(employee.id)">
+          View Details
+        </button>
+        <!-- Admin-only action -->
+        <button class="small secondary" *ngIf="isAdmin()" (click)="goToEditEmployee(employee.id)">
+          Edit
+        </button>
+
+        <button class="small danger" *ngIf="isAdmin()" (click)="deleteEmployee(employee.id)">
+          Delete
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
