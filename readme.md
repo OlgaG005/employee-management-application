@@ -139,7 +139,7 @@ Navigate to the backend project folder:
 
 Run the application:
 
-` mvn spring-boot:run`
+` mvnw.cmd spring-boot:run`
 
 The backend will start on:
 
@@ -172,6 +172,45 @@ Start the Angular application:
 The frontend will start on:
 
 <http://localhost:4200>
+
+## Run with Docker
+
+The application can also be run using Docker Compose.
+
+### Prerequisites
+
+Make sure Docker Desktop is installed and running.
+
+### Start the Application
+
+From the root project folder, run:
+
+```bash
+docker compose up --build
+```
+
+This will build and start both the backend and the frontend containers.
+
+The frontend will be available at:
+`http://localhost:4200`
+
+The backend API will be available at:
+`http://localhost:8080`
+
+Swagger UI will be available at:
+`http://localhost:8080/swagger-ui/index.html`
+
+H2 Console will be available at:
+`http://localhost:8080/h2-console`
+
+### Stop the Application
+To stop the containers, press Ctrl + C in the terminal running Docker Compose
+Then run:
+
+```bash
+docker compose down
+```
+
 
 ## Test Users
 
