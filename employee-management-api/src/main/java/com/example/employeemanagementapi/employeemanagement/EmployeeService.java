@@ -6,8 +6,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -17,11 +19,43 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
+    /*
+     *  fields  allowed for sorting.
+     */
+    private static final Set<String> ALLOWED_SORT_FIELDS = Set.of(
+            "firstName",
+            "lastName",
+            "email",
+            "jobTitle",
+            "department",
+            "createdAt",
+            "updatedAt"
+    );
     @Transactional(readOnly = true)
     public List<EmployeeResponse> getAllEmployees() {
         log.info("Fetching all employees");
 
         return employeeRepository.findAll()
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+    /*
+     *  method for searching and sorting employees.
+     */
+    @Transactional(readOnly = true)
+    public List<EmployeeResponse> getAllEmployees(String search, String sortBy, String direction) {
+        log.info("Fetching employees with search={}, sortBy={}, direction={}", search, sortBy, direction);
+
+        String safeSortBy = validateSortField(sortBy);
+        Sort.Direction sortDirection = resolveSortDirection(direction);
+
+        Sort sort = Sort.by(sortDirection, safeSortBy);
+
+        String normalizedSearch = normalizeOptionalText(search);
+
+        return employeeRepository.searchEmployees(normalizedSearch, sort)
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
@@ -115,6 +149,41 @@ public class EmployeeService {
                     throw new DuplicateResourceException("Employee with email " + email + " already exists");
                 });
     }
+
+    /*
+     * Validates the requested sort field.
+     */
+    private String validateSortField(String sortBy) {
+        if (sortBy == null || sortBy.trim().isEmpty()) {
+            return "createdAt";
+        }
+
+        String normalizedSortBy = sortBy.trim();
+
+        if (!ALLOWED_SORT_FIELDS.contains(normalizedSortBy)) {
+            log.warn("Invalid sort field requested: {}. Falling back to createdAt", sortBy);
+            return "createdAt";
+        }
+
+        return normalizedSortBy;
+    }
+
+    /*
+     * Resolves the sorting direction.
+     */
+    private Sort.Direction resolveSortDirection(String direction) {
+        if (direction == null || direction.trim().isEmpty()) {
+            return Sort.Direction.ASC;
+        }
+
+        try {
+            return Sort.Direction.fromString(direction);
+        } catch (IllegalArgumentException ex) {
+            log.warn("Invalid sort direction requested: {}. Falling back to ASC", direction);
+            return Sort.Direction.ASC;
+        }
+    }
+
 
     private EmployeeResponse mapToResponse(Employee employee) {
         return EmployeeResponse.builder()

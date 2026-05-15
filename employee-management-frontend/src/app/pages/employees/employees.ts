@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-
+import { FormsModule } from '@angular/forms';
 import { EmployeeService } from '../../services/employee';
 import { AuthService } from '../../services/auth';
 import { Employee } from '../../models/employee';
@@ -9,7 +9,7 @@ import { getApiErrorMessage } from '../../utils/error-utils';
 
 @Component({
   selector: 'app-employees',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './employees.html',
   styleUrl: './employees.css'
 })
@@ -20,6 +20,10 @@ export class Employees implements OnInit {
   errorMessage = '';
 
   role: 'ADMIN' | 'USER' | null = null;
+
+  searchTerm = '';
+  sortBy = 'createdAt';
+  direction: 'asc' | 'desc' = 'asc';
 
   constructor(
     private employeeService: EmployeeService,
@@ -49,17 +53,31 @@ export class Employees implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.employeeService.getEmployees().subscribe({
-      next: (response) => {
-        this.employees = response;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        this.errorMessage = getApiErrorMessage(err, 'Failed to load employees.');
-        this.isLoading = false;
-      }
-    });
+    this.employeeService
+      .getEmployees(this.searchTerm, this.sortBy, this.direction)
+      .subscribe({
+        next: (response) => {
+          this.employees = response;
+          this.isLoading = false;
+        },
+        error: (err) => {
+          this.errorMessage = getApiErrorMessage(err, 'Failed to load employees.');
+          this.isLoading = false;
+        }
+      });
   }
+
+  applyFilters(): void {
+    this.loadEmployees();
+  }
+
+  clearFilters(): void {
+    this.searchTerm = '';
+    this.sortBy = 'createdAt';
+    this.direction = 'asc';
+    this.loadEmployees();
+  }
+
 
   deleteEmployee(id: number): void {
     const confirmed = confirm('Are you sure you want to delete this employee?');

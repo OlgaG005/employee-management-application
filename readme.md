@@ -43,6 +43,7 @@ Role permissions:
 - H2 database console
 - Clean layered backend structure
 - Responsive and understandable UI
+- Employee searching and sorting
 
 
 
@@ -80,7 +81,7 @@ Main backend responsibilities:
 
 - Expose REST endpoints for employee CRUD operations
 - Validate incoming requests before saving data
-- Store and retrieve employee records from the database
+- Store, retrieve, search, and sort employee records from the database
 - Handle authentication through JWT
 - Enforce role-based authorization
 - Return structured error responses
@@ -302,6 +303,7 @@ Example login response:
 | POST       | /api/employees      | ADMIN       | Create employee      |
 | PUT        | /api/employees/{id} | ADMIN       | Update employee      |
 | DELETE     | /api/employees/{id} | ADMIN       | Delete employee      |
+| GET        |/api/employees?search=IT&sortBy=firstName&direction=asc| ADMIN, USER|Sort and search employees|
 
 **Employee Object**
 
@@ -442,6 +444,7 @@ Role-based access control was implemented to separate admin actions from regular
 
 - Create a new employee.
 - View the employee list.
+- Use the search and sorting controls on the employee list.
 - Open employee details.
 - Edit the employee.
 - Delete the employee.

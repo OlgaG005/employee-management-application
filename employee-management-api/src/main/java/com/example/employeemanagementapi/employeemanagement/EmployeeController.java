@@ -17,8 +17,12 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @GetMapping
-    public ResponseEntity<List<EmployeeResponse>> getAllEmployees() {
-        List<EmployeeResponse> employees = employeeService.getAllEmployees();
+    public ResponseEntity<List<EmployeeResponse>> getAllEmployees(
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction
+    ) {
+        List<EmployeeResponse> employees = employeeService.getAllEmployees(search, sortBy, direction);
 
         return ResponseEntity.ok(employees);
     }

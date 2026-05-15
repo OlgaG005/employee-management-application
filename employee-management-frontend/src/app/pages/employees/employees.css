@@ -165,4 +165,55 @@ button {
   .topbar-actions button {
     flex: 1;
   }
+
+  .filters-card {
+  grid-template-columns: 1fr;
+}
+
+.filter-actions {
+  width: 100%;
+}
+
+.filter-actions button {
+  flex: 1;
+}
+}
+
+
+.filters-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 16px;
+  align-items: end;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.filter-group label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #374151;
+}
+
+.filter-group input,
+.filter-group select {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 14px;
+  background: #ffffff;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 10px;
 }
